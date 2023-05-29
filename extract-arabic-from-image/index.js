@@ -15,11 +15,22 @@ const fileStorage = multer.diskStorage({
     cb(null, Date.now().toString() + "_" + file.originalname);
   },
 });
+const fileFilter = (req, file, cb) => {
+  if (
+    file.mimetype === "image/png" ||
+    file.mimetype === "image/jpg" ||
+    file.mimetype === "image/jpeg"
+  ) {
+    cb(null, true);
+  } else {
+    cb(null, false);
+  }
+};
 
 // Create Express Application
 const app = express();
 // Configration...
-app.use(multer({ storage: fileStorage }).single("image"));
+app.use(multer({ storage: fileStorage, fileFilter }).single("image"));
 app.set("view engine", "ejs");
 app.use(express.static("public"));
 
@@ -32,6 +43,9 @@ app.get("/", (req, res, next) => {
 });
 
 app.post("/extractText", (req, res, next) => {
+  if (!req.file) {
+    return res.redirect("/");
+  }
   let imgPath = req.file.path;
   tesseract
     .recognize(imgPath, config)
@@ -43,6 +57,8 @@ app.post("/extractText", (req, res, next) => {
     })
     .catch((error) => {
       console.log(error.message);
+      alert("Unexpected Error :(");
+      return res.redirect("/");
     });
 });
 
