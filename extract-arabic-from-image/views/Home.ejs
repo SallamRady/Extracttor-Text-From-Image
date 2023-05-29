@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Extract Arabic Text From Image</title>
+    <link href="css/Home.css" rel="stylesheet" />
+  </head>
+  <body>
+    <h1>
+      Extract <mark>Arabic</mark> Text From Image<small>initally version</small>
+    </h1>
+    <div class="container">
+      <form action="/extractText" method="POST" enctype="multipart/form-data">
+        <label>Image : </label>
+        <input type="file" name="image" />
+        <button type="submit">Extract</button>
+      </form>
+      <div class="Result">
+        <textarea><%= result %></textarea>
+      </div>
+    </div>
+  </body>
+</html>
