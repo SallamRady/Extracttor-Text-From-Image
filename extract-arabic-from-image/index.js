@@ -5,7 +5,7 @@ const tesseract = require("node-tesseract-ocr");
 const config = {
   lang: "ara",
   oem: 3,
-  psm: 6,
+  psm: 12,
 };
 const fileStorage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -42,7 +42,7 @@ app.get("/", (req, res, next) => {
   res.render(path.join(__dirname, "views", "Home.ejs"), context);
 });
 
-app.post("/extractText", (req, res, next) => {
+app.post("/extractText", async (req, res, next) => {
   if (!req.file) {
     return res.redirect("/");
   }
@@ -56,9 +56,11 @@ app.post("/extractText", (req, res, next) => {
       res.render(path.join(__dirname, "views", "Home.ejs"), context);
     })
     .catch((error) => {
-      console.log(error.message);
-      alert("Unexpected Error :(");
-      return res.redirect("/");
+      console.log("Error :", error.message);
+      let context = {
+        result: "Unexpected Error :(",
+      };
+      res.render(path.join(__dirname, "views", "Home.ejs"), context);
     });
 });
 
